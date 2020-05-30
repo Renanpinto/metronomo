@@ -1,41 +1,44 @@
 console.log("bagulhos")
 const batida = new Audio();
-batida.src = './efeitos/click.wav'
+batida.src = './efeitos/pulo.wav'
 
 const num = document.getElementById("bpm")
 const h1 = document.querySelector('h1')
 const play = document.getElementById('play')
 let bpm;
 let timer;
-bpm = (60 * 1000)/40
+let isPlaying = false;
+bpm = (60 * 1000) / 40
+
+num.addEventListener('input', function () {
+  document.querySelector('h1').innerHTML = this.value + "bpm"
+  bpm = (60 * 1000) / parseInt(this.value);
+})
 
 num.addEventListener('change', function () {
-  document.querySelector('h1').innerHTML = this.value + "bpm"
-  bpm = (60 * 1000)/parseInt(this.value);
-})
+  if (isPlaying) {
+    clearInterval(timer)
+    console.log(bpm)
+    timer = tick(bpm)
+  }
+});
 
 play.addEventListener('click', function () {
-  clearInterval(timer)
-  console.log(bpm)
-  timer = setInterval(() => {
-    batida.play()
-  }, bpm)
+  if (isPlaying) {
+    play.innerHTML = 'Play'
+    clearInterval(timer)
+  } else {
+    play.innerHTML = 'Stop'
+    //clearInterval(timer)
+    console.log(bpm)
+    timer = tick(bpm)
+  }
+  isPlaying = !isPlaying;
 })
 
-// function myFunction() {
-//   const num = document.getElementById("bpm").value;
-//   const bpm = num / 60
-//   setInterval(() => {
-//     batida.play()
-//     console.log(bpm);
-//   }, 10 * 1000);
-// }
-
-
-// function loop() {
-//   myFunction()
-
-//   frames += 100000000
-//   requestAnimationFrame(loop);
-// }
-// loop();
+function tick(bpm) {
+  return setInterval(() => {
+    console.log('ta');
+    batida.play();
+  }, bpm);
+}
